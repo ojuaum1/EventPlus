@@ -20,7 +20,7 @@ namespace webapi.event_.manha.Domains
         [Column(TypeName = "VARCHAR(150)")]
         [Required(ErrorMessage = "O ENDERECO E OBRIGATORIO! ")]
 
-        public string endereco { get; set; }
+        public string? Endereco { get; set; }
 
         [Column(TypeName = "VARCHAR(150)")]
         [Required(ErrorMessage = "O Nome fantasia e obrigatorio! ")]

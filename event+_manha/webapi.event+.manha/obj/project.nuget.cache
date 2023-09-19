@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Bs7JkRidRcXhb1cz3MTOzxewfKD46IBm+Zh+U6ny311eJPvRe6Fzx125OWSjSAnCYnL9Ts7ZRygKR3kqd9zCyg==",
+  "dgSpecHash": "CxXMTzjppskB2RphbqybpsiAr75Q5sTTTkwgsWIaRupN0C9R9eRHXwOH2Vho0b8DHU0Qhc5Y4tVt+w4nNbvEpw==",
   "success": true,
   "projectFilePath": "C:\\Users\\48342168883\\Desktop\\event+_manha\\webapi.event+.manha\\webapi.event+.manha.csproj",
   "expectedPackageFiles": [
@@ -22,6 +22,7 @@
     "C:\\Users\\48342168883\\.nuget\\packages\\microsoft.entityframeworkcore.design\\7.0.11\\microsoft.entityframeworkcore.design.7.0.11.nupkg.sha512",
     "C:\\Users\\48342168883\\.nuget\\packages\\microsoft.entityframeworkcore.relational\\7.0.11\\microsoft.entityframeworkcore.relational.7.0.11.nupkg.sha512",
     "C:\\Users\\48342168883\\.nuget\\packages\\microsoft.entityframeworkcore.sqlserver\\7.0.11\\microsoft.entityframeworkcore.sqlserver.7.0.11.nupkg.sha512",
+    "C:\\Users\\48342168883\\.nuget\\packages\\microsoft.entityframeworkcore.tools\\7.0.11\\microsoft.entityframeworkcore.tools.7.0.11.nupkg.sha512",
     "C:\\Users\\48342168883\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
     "C:\\Users\\48342168883\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\7.0.0\\microsoft.extensions.caching.abstractions.7.0.0.nupkg.sha512",
     "C:\\Users\\48342168883\\.nuget\\packages\\microsoft.extensions.caching.memory\\7.0.0\\microsoft.extensions.caching.memory.7.0.0.nupkg.sha512",

@@ -13,7 +13,7 @@ namespace webapi.event_.manha.Domains
         [Column(TypeName = "DATE")]
         [Required(ErrorMessage ="Data do evento obrigatoria")]
 
-        public string? DataEvento { get; set; }
+        public DateTime? DataEvento { get; set; }
         
         [Column(TypeName = "VARCHAR(100)")]
         [Required(ErrorMessage = "Nome do evento obrigatoria")]
@@ -35,6 +35,6 @@ namespace webapi.event_.manha.Domains
         public Guid IdInstituicao { get; set; }
 
         [ForeignKey(nameof(IdInstituicao))]
-        public Institucao Institucao { get; set; }
+        public Institucao? Institucao { get; set; }
     }
 }
