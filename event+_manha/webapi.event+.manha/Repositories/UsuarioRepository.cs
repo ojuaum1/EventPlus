@@ -8,11 +8,11 @@ namespace webapi.event_.manha.Repositories
 {
     public class UsuarioRepository : IUsuarioRepository
     {
-        private readonly EventContext eventContext;
+        private readonly EventContext _eventContext;
 
         public UsuarioRepository() 
         {
-        eventContext= new EventContext();
+            _eventContext= new EventContext();
         }
 
 
@@ -20,21 +20,33 @@ namespace webapi.event_.manha.Repositories
         {
             try
             {
-                Usuario usuarioBuscado = eventContext.Usuarios.FirstOrDefault(u => u.Email == email)!;
+                Usuario usuarioBuscado = _eventContext.Usuarios
+                    .Select(u => new Usuario
+                    {
+                        IdUsuario = u.IdUsuario,
+                        Nome = u.Nome,
+                        Email = u.Email,
+                        Senha = u.Senha,
+                        TiposUsuario = new TiposUsuario
+                        {
+                            IdTipoUsuario = u.IdTipoUsuario,
+                            Titulo = u.TiposUsuario!.Titulo
+                        }
+                    }).FirstOrDefault(u => u.Email == email)!;
+
                 if (usuarioBuscado != null)
                 {
-                    bool confere = Criptografia.compararHash(senha, usuarioBuscado.Senha!);
-                    if (confere) 
+                    bool confere = Criptografia.CompararHash(senha, usuarioBuscado.Senha!);
+
+                    if (confere)
                     {
                         return usuarioBuscado;
                     }
-                    
                 }
-                return null;
+                return null!;
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
@@ -43,7 +55,7 @@ namespace webapi.event_.manha.Repositories
         {
             try
             {
-                Usuario UsuarioBuscado = eventContext.Usuarios
+                Usuario UsuarioBuscado = _eventContext.Usuarios
                     .Select(u => new Usuario
                     { 
                     IdUsuario = u.IdUsuario,
@@ -74,9 +86,9 @@ namespace webapi.event_.manha.Repositories
             {
                 usuario.Senha = Criptografia.GerarHash(usuario.Senha);
 
-                eventContext.Usuarios.Add(usuario);
+                _eventContext.Usuarios.Add(usuario);
 
-                eventContext.SaveChanges();
+                _eventContext.SaveChanges();
             }
             catch (Exception)
             {

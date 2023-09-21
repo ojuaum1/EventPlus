@@ -1,5 +1,7 @@
-﻿using webapi.event_.manha.Contexts;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using webapi.event_.manha.Contexts;
 using webapi.event_.manha.Domains;
+using webapi.event_.manha.Utils;
 
 namespace webapi.event_.manha.Repositories
 {
@@ -18,8 +20,8 @@ namespace webapi.event_.manha.Repositories
         }
 
         public TiposUsuario BuscarPorId(Guid Id) 
-        { 
-            throw new NotImplementedException();
+        {
+            return null;
         }
 
         public void Cadastrar(TiposUsuario tiposUsuario)
