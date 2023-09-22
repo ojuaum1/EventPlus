@@ -1,6 +1,10 @@
-﻿namespace webapi.event_.manha.Interfaces
+﻿using webapi.event_.manha.Domains;
+
+namespace webapi.event_.manha.Interfaces
 {
-    public interface IInstituicao
+    public interface Instituicao
     {
+        void Cadastrar(Institucao institucao);
+
     }
 }
