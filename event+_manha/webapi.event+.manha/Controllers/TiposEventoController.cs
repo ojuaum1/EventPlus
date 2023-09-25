@@ -3,6 +3,7 @@ using apiweb.eventplus.manha.Interfaces;
 using apiweb.eventplus.manha.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using webapi.event_.manha.Domains;
 
 namespace apiweb.eventplus.manha.Controllers
 {
@@ -32,7 +33,7 @@ namespace apiweb.eventplus.manha.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(TipoEvento tipoEvento)
+        public IActionResult Post(TiposEvento tipoEvento)
         {
             try
             {

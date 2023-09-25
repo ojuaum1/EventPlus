@@ -3,6 +3,7 @@ using apiweb.eventplus.manha.Interfaces;
 using apiweb.eventplus.manha.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using webapi.event_.manha.Repositories;
 
 namespace apiweb.eventplus.manha.Controllers
 {
@@ -14,7 +15,7 @@ namespace apiweb.eventplus.manha.Controllers
         IPresencaEventoRepository _presencaRepository;
         public PresencaEventoController()
         {
-            _presencaRepository = new PresencaEventoRepository();
+            _presencaRepository = new PresencasEventoRepository();
         }
 
         [HttpGet]

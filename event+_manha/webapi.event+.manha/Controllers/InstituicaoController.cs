@@ -3,6 +3,8 @@ using apiweb.eventplus.manha.Interfaces;
 using apiweb.eventplus.manha.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using webapi.event_.manha.Domains;
+using webapi.event_.manha.Interfaces;
 
 namespace apiweb.eventplus.manha.Controllers
 {
@@ -11,10 +13,10 @@ namespace apiweb.eventplus.manha.Controllers
     [Produces("application/json")]
     public class InstituicaoController : ControllerBase
     {
-        IInstituicaoRepository _instituicaoRepository;
+      private IInstituicao _instituicao;
         public InstituicaoController()
         {
-            _instituicaoRepository = new InstituicaoRepository();
+            _instituicao = new InstituicaoRepository();
         }
 
         [HttpPost]
@@ -24,7 +26,7 @@ namespace apiweb.eventplus.manha.Controllers
             {
                 if (instituicao != null)
                 {
-                    _instituicaoRepository.Cadastrar(instituicao);
+                    _instituicao.Cadastrar(Instituicao instituicao);
                     return Ok("Usuario cadastrado!");
 
                 }

@@ -6,9 +6,9 @@ using System.Security.Principal;
 
 namespace webapi.event_.manha.Domains
 {
-    [Table(nameof(Institucao))]
+    [Table(nameof(Instituicao))]
     [Index(nameof(CNPJ),IsUnique = true)]
-    public class Institucao
+    public class Instituicao
     {
         [Key]
         public Guid IdInstituicao { get; set; }

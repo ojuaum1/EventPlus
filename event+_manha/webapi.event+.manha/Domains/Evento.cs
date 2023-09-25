@@ -35,6 +35,6 @@ namespace webapi.event_.manha.Domains
         public Guid IdInstituicao { get; set; }
 
         [ForeignKey(nameof(IdInstituicao))]
-        public Institucao? Institucao { get; set; }
+        public Instituicao? Institucao { get; set; }
     }
 }
