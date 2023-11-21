@@ -1,9 +1,9 @@
 import React from 'react';
 import "./Banner.css"
-const banner = () => {
+const Banner = () => {
     return (
        <article className='banner'></article>
     );
 };
 
-export default banner;
+export default Banner;
