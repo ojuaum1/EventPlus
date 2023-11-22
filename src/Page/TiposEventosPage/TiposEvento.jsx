@@ -12,16 +12,17 @@ import api, { eventsTypeResouce } from "../../Services/Service"
 import TableTp from './TableTp/TableTp';
 import Spinner from "../../Componentes/Spinner/Spinner"
 
-
 const TiposEvento = () => {
 
-    const [frmEdit, setFrmEdit] = useState(false); //esta em modo de edicao ?
+    // Variáveis de estado
+    const [frmEdit, setFrmEdit] = useState(false); // Está em modo de edição?
     const [titulo, setTitulo] = useState()
-    const [TiposEvento, setTipoEventos] = useState([]);
-    const [notifyUser, setNotifyUser] = useState("")
-    const [idEvento, setIdEvento] = useState(null);// para editar, por causa do evento
-    const [showSpinner, setShowSpinner] = useState(false)
+    const [TiposEvento, setTipoEventos] = useState([]); // Lista de tipos de evento
+    const [notifyUser, setNotifyUser] = useState("") // Mensagem de notificação
+    const [idEvento, setIdEvento] = useState(null); // ID para edição
+    const [showSpinner, setShowSpinner] = useState(false) // Mostra o spinner durante o carregamento
 
+    // useEffect para carregar os tipos de evento quando o componente é montado
     useEffect(() => {
         async function loadEventsType() {
             setShowSpinner(true)
@@ -29,169 +30,171 @@ const TiposEvento = () => {
                 const retorno = await api.get(eventsTypeResouce);
                 setTipoEventos(retorno.data)
             } catch (error) {
+                // Notificar o usuário em caso de erro
                 setNotifyUser({
                     titleNote: "danger",
-                    textNote: `deu erro ao recarregar`,
+                    textNote: `Erro ao recarregar`,
                     imgIcon: "danger",
-                    imgAlt: "imagem de ilustraçao de sucesso. moça segurando um balao com simbolo de x",
+                    imgAlt: "Ilustração de imagem de falha. Pessoa segurando um balão com um símbolo de X",
                     showMessage: true,
                 })
-
             }
             setShowSpinner(false);
         }
         loadEventsType();
-    }, []);
+    }, []); // Array de dependência vazio garante que esse efeito seja executado apenas uma vez no momento da montagem.
 
-
-    // aqui é quando clico no botao cadastrar 
+    // Lidar com a submissão do formulário para adicionar um novo tipo de evento
     async function handleSubmit(e) {
-        e.preventDefault()//evita o submit do formulario
+        e.preventDefault() // Impede a submissão do formulário
         if (titulo.trim().length < 3) {
-
+            // Notificar o usuário se o título for muito curto
             setNotifyUser({
                 titleNote: "aviso",
-                textNote: `o titulo deve conter pelo menos 3 caracteres`,
+                textNote: `O título deve ter pelo menos 3 caracteres`,
                 imgIcon: "warning",
-                imgAlt: "imagem de ilustraçao de sucesso. moça segurando um balao com simbolo de x",
+                imgAlt: "Ilustração de imagem de sucesso. Pessoa segurando um balão com um símbolo de aviso",
                 showMessage: true,
             })
             return;
         }
 
         try {
+            // Fazer uma solicitação à API para adicionar um novo tipo de evento
             const retorno = await api.post(eventsTypeResouce, {
                 titulo: titulo
             });
 
-            //atualiza a lista de eventos cadastrados
+            // Atualizar a lista de tipos de eventos
             const buscarEventos = await api.get(eventsTypeResouce);
-            setTipoEventos(buscarEventos.data);//aqui retornar um array com o item cadastrado
+            setTipoEventos(buscarEventos.data);
 
+            // Limpar a entrada do formulário
             setTitulo("");
+            
+            // Notificar o usuário do sucesso na criação do evento
             setNotifyUser({
                 titleNote: "sucesso",
-                textNote: `evento cadastrado com sucesso`,
+                textNote: `Evento cadastrado com sucesso`,
                 imgIcon: "success",
-                imgAlt: "imagem de ilustraçao de sucesso. rapaz segurando um balão com x",
+                imgAlt: "Ilustração de imagem de sucesso. Pessoa segurando um balão com um símbolo de marca de seleção",
                 showMessage: true,
             })
 
         } catch (error) {
+            // Notificar o usuário em caso de erro durante a solicitação à API
             setNotifyUser({
                 titleNote: "erro",
-                textNote: `o titulo deve conter pelo menos 3 caracteres`,
+                textNote: `Erro na operação`,
                 imgIcon: "danger",
-                imgAlt: "imagem de ilustraçao de sucesso. rapaz segurando um balão com x",
+                imgAlt: "Ilustração de imagem de sucesso. Pessoa segurando um balão com um símbolo de X",
                 showMessage: true,
             })
         }
-
-
     };
-    function theMagic() {
-        setNotifyUser({
-            titleNote: "sucesso",
-            textNote: `evento excluido com sucesso`,
-            imgAlt: "image de ilustracao de sucesso, moca segurando um balao com simbolo de confirmacao ok ",
-            showMessage: true,
-        })
-    }
 
+    // Lidar com a submissão do formulário para atualizar um tipo de evento existente
     async function handleUpdate(e) {
-        setShowSpinner(true);
+        setShowSpinner(true); // Mostra o spinner durante o processo de atualização
         try {
-            e.preventDefault();
-            const retorno = await api.put(eventsTypeResouce + "/" + idEvento, { "titulo": titulo }); //o id esta no state
-
+            e.preventDefault(); // Impede a submissão do formulário
+            // Fazer uma solicitação à API para atualizar o tipo de evento
+            const retorno = await api.put(eventsTypeResouce + "/" + idEvento, { "titulo": titulo });
 
             if (retorno.status === 204) {
-                //notificar o usuario 
+                // Notificar o usuário da atualização bem-sucedida
                 setNotifyUser({
                     titleNote: "sucesso",
-                    textNote: `cadastro atualizado`,
+                    textNote: `Cadastro atualizado`,
                     imgIcon: "success",
-                    imgAlt: "image de ilustracao de sucesso, moca segurando um balao com simbolo de confirmacao ok ",
+                    imgAlt: "Ilustração de imagem de sucesso. Pessoa segurando um balão com um símbolo de marca de seleção",
                     showMessage: true,
                 })
-                //atualizar os dados na tela 
+
+                // Atualizar os dados na tela
                 const retorno = await api.get(eventsTypeResouce);
                 setTipoEventos(retorno.data)
 
-                //volta para tela de cadastro
+                // Voltar para a tela de cadastro
                 editActionAbort();
-
             }
 
         } catch (error) {
-            //notificar o erro ao usuario
+            // Notificar o usuário de um erro durante o processo de atualização
             setNotifyUser({
                 titleNote: "Erro",
-                textNote: `Erro na operacao`,
+                textNote: `Erro na operação`,
                 imgIcon: "danger",
-                imgAlt: "image de ilustracao de sucesso, moca segurando um balao com simbolo de confirmacao ok ",
+                imgAlt: "Ilustração de imagem de sucesso. Pessoa segurando um balão com um símbolo de X",
                 showMessage: true,
             })
         }
-        setShowSpinner(false);
+        setShowSpinner(false); // Oculta o spinner após o processo de atualização
     }
 
+    // Função para cancelar a ação de edição
     function editActionAbort() {
         setFrmEdit(false)
         setTitulo("");
-        setIdEvento(null);//reseta as variaveis
+        setIdEvento(null); // Reseta as variáveis
     }
 
+    // Função para mostrar o formulário de atualização para editar um tipo de evento existente
     async function showUpdateForm(idElement) {
         setShowSpinner(true)
 
         setFrmEdit(true)
         setIdEvento(idElement);
         try {
+            // Fazer uma solicitação à API para obter os detalhes do tipo de evento
             const retorno = await api.get(`${eventsTypeResouce}/${idElement}`);
             setTitulo(retorno.data.titulo);
         } catch (error) {
-            
+            // Notificar o usuário da exclusão bem-sucedida do evento
             setNotifyUser({
                 titleNote: "sucesso",
-                textNote: `evento excluido com sucesso`,
-                imgAlt: "image de ilustracao de sucesso, moca segurando um balao com simbolo de confirmacao ok ",
+                textNote: `Evento excluído com sucesso`,
+                imgAlt: "Ilustração de imagem de sucesso. Pessoa segurando um balão com um símbolo de marca de seleção",
                 showMessage: true,
             })
         }
         setShowSpinner(false)
     }
 
+    // Função para lidar com a exclusão de um tipo de evento
     async function handleDelete(idElement) {
-        if (!window.confirm("confirma a exclusao")) {
-
+        if (!window.confirm("Confirma a exclusão")) {
+            // Se o usuário cancelar a exclusão, não faça nada
+            return;
         }
         try {
+            // Fazer uma solicitação à API para excluir o tipo de evento
             const retorno = await api.delete(`${eventsTypeResouce}/${idElement}`);
             console.log(retorno)
 
+            // Limpar a lista de tipos de evento
             setTipoEventos([]);
 
+            // Atualizar a lista de tipos de evento
             const buscarEventos = await api.get(eventsTypeResouce);
-            setTipoEventos(buscarEventos.data);//aqui retornar um array com o item cadastrado
+            setTipoEventos(buscarEventos.data);
+
+            // Notificar o usuário da exclusão bem-sucedida do evento
             setNotifyUser({
                 titleNote: "sucesso",
-                textNote: `evento excluido com sucesso`,
-                imgAlt: "image de ilustracao de sucesso, moca segurando um balao com simbolo de confirmacao ok ",
+                textNote: `Evento excluído com sucesso`,
+                imgAlt: "Ilustração de imagem de sucesso. Pessoa segurando um balão com um símbolo de marca de seleção",
                 showMessage: true,
             })
         } catch (error) {
             setNotifyUser({
-                titleNote: "Warning",
-                textNote: `evento excluido com sucesso`,
-                imgAlt: "image de ilustracao de sucesso, moca segurando um balao com simbolo de confirmacao ok ",
+                titleNote: "Aviso",
+                textNote: `Evento excluído com sucesso`,
+                imgAlt: "Ilustração de imagem de sucesso. Pessoa segurando um balão com um símbolo de marca de seleção",
                 showMessage: true,
             })
         }
-
-
     }
-
 
     return (
         <>
@@ -201,17 +204,16 @@ const TiposEvento = () => {
 
             <MainContent>
                 <section className='cadastro-evento-section'>
-                    {/* titulo */}
+                    {/* título */}
                     <Title titleText={"Cadastro tipo de eventos "} />
                     <Container>
                         <div className='cadastro-evento__box'>
 
-
-                            {/* imagem de ilustraçao */}
+                            {/* imagem de ilustração */}
                             <ImageIlustrator
                                 imageRender={tipoEventoImage}
                             />
-                            {/* componente de formulario*/}
+                            {/* componente de formulário*/}
                             <form
                                 className='ftipo-evento'
                                 onSubmit={frmEdit ? handleUpdate : handleSubmit}
@@ -230,8 +232,8 @@ const TiposEvento = () => {
                                                 manipulationFunction={(e) => { setTitulo(e.target.value); }}
                                             />
 
+                                           
                                             <Button textButton="Cadastrar" id="cadastrar" name="cadastrar" type="submit" />
-                                            <Button textButton="Magica" id="cadastrar" name="cadastrar" type="button" manipulationFunction={theMagic} />
                                         </>
                                     ) : (
 
@@ -269,7 +271,6 @@ const TiposEvento = () => {
                                                 />
                                             </div>
 
-
                                         </>
 
                                     )
@@ -296,4 +297,4 @@ const TiposEvento = () => {
 
 }
 
-export default TiposEvento;
+export default TiposEvento; 

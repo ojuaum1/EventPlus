@@ -18,6 +18,7 @@ export const Input = ({
             id={id}
             name={name}
             value={value}
+            placeholder={placeholder}
             required={required ? "required" : ""}
             className={`input-component ${additionalClass}`}
             onChange={manipulationFunction}
@@ -71,7 +72,7 @@ value={defaultValue}
 {/* <option value="">Tipo Evento</option> */}
 {options.map((o) =>{
     return(
-       <option key={Math.random} value={o.value}>{o.text}</option>
+       <option key={Math.random} value={o.idTipoEvento}>{o.titulo}</option>
     );
 })}
 </select>
