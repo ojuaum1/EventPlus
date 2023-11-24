@@ -8,7 +8,7 @@ import "./TiposEvento.css"
 import { Button, Input } from '../../Componentes/FormComponents/FormComponents';
 import Notification from "../../Componentes/Notification/Notification"
 //api
-import api, { eventsTypeResouce } from "../../Services/Service"
+import api, {eventsTypeResource} from "../../Services/Service"
 import TableTp from './TableTp/TableTp';
 import Spinner from "../../Componentes/Spinner/Spinner"
 
@@ -27,7 +27,7 @@ const TiposEvento = () => {
         async function loadEventsType() {
             setShowSpinner(true)
             try {
-                const retorno = await api.get(eventsTypeResouce);
+                const retorno = await api.get(eventsTypeResource);
                 setTipoEventos(retorno.data)
             } catch (error) {
                 // Notificar o usuário em caso de erro
@@ -61,12 +61,12 @@ const TiposEvento = () => {
 
         try {
             // Fazer uma solicitação à API para adicionar um novo tipo de evento
-            const retorno = await api.post(eventsTypeResouce, {
+            const retorno = await api.post(eventsTypeResource, {
                 titulo: titulo
             });
 
             // Atualizar a lista de tipos de eventos
-            const buscarEventos = await api.get(eventsTypeResouce);
+            const buscarEventos = await api.get(eventsTypeResource);
             setTipoEventos(buscarEventos.data);
 
             // Limpar a entrada do formulário
@@ -99,7 +99,7 @@ const TiposEvento = () => {
         try {
             e.preventDefault(); // Impede a submissão do formulário
             // Fazer uma solicitação à API para atualizar o tipo de evento
-            const retorno = await api.put(eventsTypeResouce + "/" + idEvento, { "titulo": titulo });
+            const retorno = await api.put(eventsTypeResource + "/" + idEvento, { "titulo": titulo });
 
             if (retorno.status === 204) {
                 // Notificar o usuário da atualização bem-sucedida
@@ -112,7 +112,7 @@ const TiposEvento = () => {
                 })
 
                 // Atualizar os dados na tela
-                const retorno = await api.get(eventsTypeResouce);
+                const retorno = await api.get(eventsTypeResource);
                 setTipoEventos(retorno.data)
 
                 // Voltar para a tela de cadastro
@@ -147,7 +147,7 @@ const TiposEvento = () => {
         setIdEvento(idElement);
         try {
             // Fazer uma solicitação à API para obter os detalhes do tipo de evento
-            const retorno = await api.get(`${eventsTypeResouce}/${idElement}`);
+            const retorno = await api.get(`${eventsTypeResource}/${idElement}`);
             setTitulo(retorno.data.titulo);
         } catch (error) {
             // Notificar o usuário da exclusão bem-sucedida do evento
@@ -169,14 +169,14 @@ const TiposEvento = () => {
         }
         try {
             // Fazer uma solicitação à API para excluir o tipo de evento
-            const retorno = await api.delete(`${eventsTypeResouce}/${idElement}`);
+            const retorno = await api.delete(`${eventsTypeResource}/${idElement}`);
             console.log(retorno)
 
             // Limpar a lista de tipos de evento
             setTipoEventos([]);
 
             // Atualizar a lista de tipos de evento
-            const buscarEventos = await api.get(eventsTypeResouce);
+            const buscarEventos = await api.get(eventsTypeResource);
             setTipoEventos(buscarEventos.data);
 
             // Notificar o usuário da exclusão bem-sucedida do evento

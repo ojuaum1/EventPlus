@@ -15,10 +15,7 @@ const TableTp = ({ dados, fnDelete = null, fnUpdate = null }) => {
 
             <thead className="table-data__head">
                 <tr className="table-data__head-row">
-                    <th className="table-data__head-title table-data__head-title--big">Evento</th> 
-                     <th className="table-data__head-title table-data__head-title--little">Descricao</th>
-                    <th className="table-data__head-title table-data__head-title--big">Tipo Evento</th>
-                    <th className="table-data__head-title table-data__head-title--big">Data</th>
+                    <th className="table-data__head-title table-data__head-title--big">Titulo</th> 
                     <th className="table-data__head-title table-data__head-title--little">Editar</th>
                     <th className="table-data__head-title table-data__head-title--little">Deletar</th>
                 </tr>

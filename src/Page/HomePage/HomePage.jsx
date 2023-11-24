@@ -8,7 +8,7 @@ import MainContent from '../../Componentes/MainContent/MainContent';
 import VisionSection from '../../Componentes/VisionSection/VisionSection';
 import NextEvent from '../../Componentes/NextEvent/NextEvent';
 import api from '../../Services/Service';
-import {nextEventResouce} from '../../Services/Service'
+import {nextEventResource} from '../../Services/Service'
 
 
 const HomePage = () => {
@@ -19,7 +19,7 @@ const HomePage = () => {
     async function getNextEvents() {
       try {
         // const promisse = await api.get("/Evento/ListarProximos");
-        const promisse = await api.get(`${nextEventResouce}`);
+        const promisse = await api.get(`${nextEventResource}`);
         const dados = await promisse.data
         console.log(dados);
 

@@ -39,7 +39,7 @@ export const Button = (props) => {
             id={props.id}
             name={props.name}
             type={props.type}
-            className= {`button-component ${props.additionalClass}`}
+            className={`button-component ${props.additionalClass}`}
             onClick={props.manipulationFunction}
         >
             {props.textButton}
@@ -54,28 +54,28 @@ export const Select = ({
     name,
     options,
     manipulationFunction,
-    additionalClass= "",
+    additionalClass = "",
     onChange,
-    className ,
-    defaultValue
+    className,
+    value = ''
 }) => {
 
     return (
-<select 
-name={name} 
-id={id}
-required ={required}
-className={`input-component ${additionalClass}`}
-onChange={manipulationFunction}
-value={defaultValue}
->
-{/* <option value="">Tipo Evento</option> */}
-{options.map((o) =>{
-    return(
-       <option key={Math.random} value={o.idTipoEvento}>{o.titulo}</option>
-    );
-})}
-</select>
+        <select
+            name={name}
+            id={id}
+            required={required}
+            className={`input-component ${additionalClass}`}
+            onChange={manipulationFunction}
+            value={value}
+        >
+            <option unselectable value="">Selecione </option>
+            {options.map((o) => {
+                return (
+                    <option value={o.idTipoEvento}>{o.titulo}</option>
+                );
+            })}
+        </select>
 
     )
 }
