@@ -1,400 +1,458 @@
-// Importação de bibliotecas e componentes do React e do projeto
+
 import React, { useEffect, useState } from 'react';
-import './EventosPage.css'
-import Title from '../../Componentes/Title/Title'
-import MainContent from '../../Componentes/MainContent/MainContent';
 import Container from '../../Componentes/Container/Container';
-import ImageIlustrator from '../../Componentes/ImageIllustrator/ImageIllustrator'
-import eventoImage from '../../Assets/images/evento.svg'
-import { Input, Button, Select } from '../../Componentes/FormComponents/FormComponents'
-import api, { eventsResource, eventsTypeResource } from '../../Services/Service';
-import TableEvent from './TableEv/TableEv';
-import Notification from '../../Componentes/Notification/Notification'
-import Spinner from "../../Componentes/Spinner/Spinner"
+import ImageIllustrator from '../../Componentes/ImageIllustrator/ImageIllustrator';
+import MainContent from '../../Componentes/MainContent/MainContent';
+import Title from '../../Componentes/Title/Title';
+import { Input, Button, Select } from '../../Componentes/FormComponents/FormComponents';
+import TableEv from './TableEv/TableEv';
+import Notification from '../../Componentes/Notification/Notification';
+import Spinner from '../../Componentes/Spinner/Spinner';
 
-// Definição do componente principal, EventosPage
+
+//estilizacao
+import './EventosPage.css';
+
+//imagens
+import EventoImagem from '../../Assets/images/evento.svg';
+
+//api
+import api, { eventsTypeResource, eventsResource } from '../../Services/Service';
+
+
 const EventosPage = () => {
-    // STATES - Estados do componente
-    const [frmEdit, setFrmEdit] = useState(false); // Indica se o formulário está em modo de edição
 
-    const IdInstituicao = "95A14FC6-240A-470E-9C8D-F6863772D99B"
 
-    // Estados para armazenar dados do evento
-    const [nomeEvento, setNomeEvento] = useState('');
-    const [descricao, setDescricao] = useState('');
-    const [idTipoEvento, setIdTipoEvento] = useState('');
+    //states
+    const [frmEdit, setFrmEdit] = useState(false); //esta em edicao?
+    const [nome, setNome] = useState("");
+    const [idTypeEvento, setIdTypeEvento] = useState("");
+    const [descricao, setDescricao] = useState("");
+    const [frmdata, setFrmData] = useState("");
     const [idEvento, setIdEvento] = useState(null);
-    const [dataEvento, setDataEvento] = useState('');
+    const [tipoEventos, setTipoEventos] = useState([]);// quando precisar trazer um array no useState usar []
+    const [eventos, setEventos] = useState([]);// quando precisar trazer um array no useState usar []
+    const [frmEditData, setfrmEditData] = useState([]);
 
-    // Estados para armazenar tipos de eventos e eventos
-    const [tiposEvento, setTipoEventos] = useState([]);
-    const [eventos, setEventos] = useState([]);
-    const [notifyUser, setNotifyUser] = useState([]) // Estado para exibir notificações
-    const [showSpinner, setShowSpinner] = useState(false) // Estado para exibir spinner de carregamento
 
-    // FUNÇÕES - Funções auxiliares do componente
 
-    // Função assíncrona para carregar os tipos de eventos da API
-    async function loadEventsType() {
-        try {
-            const retorno = await api.get(eventsTypeResource);
-            setTipoEventos(retorno.data)
-        } catch (error) {
-            setNotifyUser({
-                titleNote: 'Erro',
-                textNote: 'Erro na operação. Verifique sua conexão com a internet',
-                imgIcon: 'danger',
-                imgAlt: 'Imagem de ilustração de erro. Rapaz segurando letra x.',
-                showMessage: true
-            })
-        }
-    }
+    const [notifyUser, setNotifyUser] = useState("");
+    const [showSpinner, setShowSpinner] = useState(false);//spinner loading
 
-    // Função assíncrona para carregar os eventos da API
-    async function loadEvents() {
-        try {
-            const retorno = await api.get(eventsResource);
-            setEventos(retorno.data)
-        } catch (error) {
-            setNotifyUser({
-                titleNote: 'Erro',
-                textNote: 'Erro na operação. Verifique sua conexão com a internet',
-                imgIcon: 'danger',
-                imgAlt: 'Imagem de ilustração de erro. Rapaz segurando letra x.',
-                showMessage: true
-            })
-        }
-    }
 
-    // Efeito que é executado ao montar o componente, carregando os tipos de eventos e eventos
     useEffect(() => {
-        loadEventsType()
-        loadEvents()
-    }, [])
 
-    // Função para exibir uma notificação de sucesso
-    function theMagic(textNote) {
-        setNotifyUser({
-            titleNote: 'Sucesso',
-            textNote,
-            imgIcon: 'Success',
-            imgAlt: 'Imagem de ilustração de sucesso. Moça segurando um balão com símbolo de confirmação ok.',
-            showMessage: true
-        })
+        //toda vez que houver alguma alteracao na api essa funcao correga o array tipo eventos
+        async function loadEventsType() {
+            setShowSpinner(true);
+
+            try {
+                const retorno = await api.get(eventsTypeResource);
+                const dados = await (retorno.data.map(tipoEvento => {
+                    return { value: tipoEvento.idTipoEvento, text: tipoEvento.titulo }
+                }))
+                setTipoEventos(dados);
+                console.log(retorno.data);
+
+            } catch (error) {
+                setNotifyUser({
+                    titleNote: "danger",
+                    textNote: 'Erro api na funcao loadEventsType no tipoEventos.JSX',
+                    imgIcon: "danger",
+                    imgAlt: "Imagem de illustracao de erro, Rapaz segurando im balão com símbolo",
+                    showMessage: true
+                });
+
+                console.log(error);
+            }
+
+            setShowSpinner(false);
+        }
+
+        async function loadEvents() {
+            setShowSpinner(true);
+
+            try {
+                const retorno = await api.get(eventsResource);
+
+                setEventos(retorno.data);
+                console.log(retorno.data);
+
+            } catch (error) {
+                setNotifyUser({
+                    titleNote: "danger",
+                    textNote: 'Erro api na funcao loadEventsType no tipoEventos.JSX',
+                    imgIcon: "danger",
+                    imgAlt: "Imagem de illustracao de erro, Rapaz segurando im balão com símbolo",
+                    showMessage: true
+                });
+
+                console.log(error);
+            }
+
+            setShowSpinner(false);
+        }
+
+
+        //chama a funcao/api no carregamento da page/componentes
+        loadEventsType();
+        loadEvents();
+    }, []);
+
+
+    /* ******CADASTRAR****** */
+    async function handleSubmit(e) {
+        e.preventDefault();// evita o submit do formulario
+
+
+        try {
+            //('recurso', 'objeto de config')
+            /*  setFrmData(new Date(frmdata).toJSON()); */
+            const retorno = await api.post(eventsResource, {
+                nomeEvento: nome,
+                descricao: descricao,
+                idTipoEvento: idTypeEvento,
+                dataEvento: frmdata,
+                idInstituicao: "8A74DD39-CC23-4125-BFBA-03C85D1C3E94"
+
+            });
+
+            console.log(retorno);
+            //atualiza a lista de eventos cadastrados
+            const buscarEventos = await api.get(eventsResource);
+            setEventos(buscarEventos.data);//aqui retornar um array com o item cadastrado
+            console.log(retorno);
+            //esse comando usa para zerar o imput apos enviar para api
+            setNome("")
+            setDescricao('')
+            setFrmData('')
+
+            setNotifyUser({
+                titleNote: "Sucesso",
+                textNote: "Evento cadastrado com sucesso",
+                imgIcon: "success",
+                imgAlt:
+                    "Image de ilustracao de sucesso. Moça segurando um balão com símbolo de confirmação ok",
+                showMessage: true
+            });
+            console.log(retorno);
+
+        } catch (error) {
+
+            console.error(error)
+
+            setNotifyUser({
+                titleNote: "danger",
+                textNote: 'deu ruim no submit da funcao handleSubmit',
+                imgIcon: "danger",
+                imgAlt: "Imagem de illustracao de erro, Rapaz segurando im balão com símbolo",
+                showMessage: true
+            });
+
+
+        }
+
     }
 
-    // Função para lidar com o envio do formulário de cadastro ou edição de evento
-    async function handleSubmit(e) {
-        e.preventDefault();
-        if (nomeEvento.trim().length < 3) {
+    /* ******ATUALIZAR****** */
+    async function handleUpdate(e) {
+
+
+        try {
+
+            e.preventDefault();
+            setShowSpinner(true);
+
+            const retorno = await api.put(eventsResource + "/" + idEvento, {
+
+            });
+
+            if (retorno.status === 204) {
+                //avisa o usuario que foi cadastrado
+                setNotifyUser({
+                    titleNote: "Sucesso",
+                    textNote: "Evento alterado com sucesso",
+                    imgIcon: "success",
+                    imgAlt: "Imagem de illustracao de sucesso",
+                    showMessage: true
+                });
+
+                //atualiza os dados na tela
+                const retorno = await api.get(eventsResource);
+                setEventos(retorno.data)
+            }
+
+            //volta para a tela de cadastro
+            editActionAbort();
+
+
+        } catch (error) {
+
+            //avisa o usuario que deu erro na execução da etapa
             setNotifyUser({
-                titleNote: 'Aviso',
-                textNote: 'O título deve conter pelo menos 3 caracteres',
-                imgIcon: 'warning',
-                imgAlt: 'Imagem de ilustração de erro. Rapaz segurando letra x.',
+                titleNote: "danger",
+                textNote: 'deu ruim no submit da funcao handleUpdate',
+                imgIcon: "danger",
+                imgAlt: "Imagem de illustracao de erro, Rapaz segurando im balão com símbolo",
                 showMessage: true
-            })
+            });
+        }
+    }
+
+    //cancela a tela de edicao
+    function editActionAbort() {
+
+        setFrmEdit(false);
+        // setTitulo("");
+        setIdEvento(null);
+
+    }
+
+    //mostra o formulario de edicao
+    async function showUpdateForm(evento) {
+
+        setfrmEditData(evento)
+        setFrmEdit(true);
+        /*    setIdEvento(idEvento); */
+
+        try {
+
+            const retorno = await api.get(`${eventsResource}/${idEvento}`);
+            setNome(retorno.data.nomeEvento)
+            setDescricao(retorno.data.descricao)
+            setTipoEventos(retorno.data.idTipoEvento)
+            setFrmData(retorno.data.dataEvento)
+
+            console.log(retorno);
+
+        } catch (error) {
+
+            setNotifyUser({
+                titleNote: "danger",
+                textNote: 'deu ruim no delete na função showUpdateForm',
+                imgIcon: "danger",
+                imgAlt: "Imagem de illustracao de erro, Rapaz segurando im balão com símbolo",
+                showMessage: true
+            });
+        }
+
+
+
+    }
+
+    /* ******DELETAR****** */
+    async function handleDelete(idElement) {
+
+        if (!window.confirm("Confirma a exclusão?")) {
+
             return;
         }
 
         try {
-            // Requisição para cadastrar um novo evento
-            await api.post(eventsResource, {
-                dataEvento: dataEvento,
-                nomeEvento: nomeEvento,
-                descricao: descricao,
-                idTipoEvento: idTipoEvento,
-                idInstituicao: IdInstituicao
-            })
-            theMagic("Cadastrado com sucesso")
-            loadEvents() // Recarrega a lista de eventos após o cadastro
+
+            const retorno = await api.delete(`${eventsResource}/${idElement}`);
+
+            setEventos([]);//atualiza o TipoEventos
+
+            const buscarEventos = await api.get(eventsResource);
+            setEventos(buscarEventos.data);//aqui retornar um array sem o item apagado
+
+            setNotifyUser({
+                titleNote: "Sucesso",
+                textNote: "Evento excluído com sucesso",
+                imgIcon: "success",
+                imgAlt: "Imagem de illustracao de sucesso",
+                showMessage: true
+            });
+
+            console.log(retorno);
 
         } catch (error) {
-            // Exibe uma notificação de erro em caso de falha na operação
-            setNotifyUser({
-                titleNote: 'Erro',
-                textNote: 'Erro na operação. Verifique sua conexão com a internet',
-                imgIcon: 'warning',
-                imgAlt: 'Imagem de ilustração de erro. Rapaz segurando letra x.',
-                showMessage: true
-            })
+
+            alert("deu ruim no delete na handleDelete")
         }
+
     }
 
-    // Função para lidar com o envio do formulário de atualização de evento
-    async function handleUpdate(e) {
-        e.preventDefault();
-        if (nomeEvento.trim().length < 3) {
-            setNotifyUser({
-                titleNote: 'Aviso',
-                textNote: 'O título deve conter pelo menos 3 caracteres',
-                imgIcon: 'warning',
-                imgAlt: 'Imagem de ilustração de erro. Rapaz segurando letra x.',
-                showMessage: true
-            })
-        }
-        try {
-            // Requisição para atualizar um evento existente
-            const promise = await api.put(`${eventsResource}/${idEvento}`, {
-                dataEvento: dataEvento,
-                nomeEvento: nomeEvento,
-                descricao: descricao,
-                idTipoEvento: idTipoEvento,
-                idInstituicao: IdInstituicao
-            })
-
-            if (promise.status == 204) {
-                setFrmEdit(false)
-                setDataEvento('')
-                setNomeEvento('')
-                setDescricao('')
-                setIdTipoEvento('')
-                theMagic("Atualizado com sucesso")
-                loadEvents() // Recarrega a lista de eventos após a atualização
-            }
-        } catch (error) {
-            // Exibe uma notificação de erro em caso de falha na operação
-            setNotifyUser({
-                titleNote: 'Erro',
-                textNote: 'Erro na operação. Verifique sua conexão com a internet',
-                imgIcon: 'warning',
-                imgAlt: 'Imagem de ilustração de erro. Rapaz segurando letra x.',
-                showMessage: true
-            })
-        }
+    function theMagic() {
+        setNotifyUser({
+            titleNote: "Sucesso",
+            textNote: "Evento excluído com sucesso",
+            imgIcon: "success",
+            imgAlt: "Imagem de illustracao de sucesso",
+            showMessage: true
+        });
     }
 
-    // Função para cancelar a edição do formulário
-    function editActionAbort() {
-        setFrmEdit(false)
-        setDataEvento('')
-        setNomeEvento('')
-        setDescricao('')
-        setIdTipoEvento('')
-    }
-
-    // Função para exibir o formulário de atualização com os dados do evento selecionado
-    async function showUpdateForm(idElement) {
-        setFrmEdit(true)
-        try {
-            const promise = await api.get(`${eventsResource}/${idElement}`, { idElement })
-            setDataEvento(promise.data.dataEvento.slice(0, 10))
-            setNomeEvento(promise.data.nomeEvento)
-            setDescricao(promise.data.descricao)
-            setIdTipoEvento(promise.data.idTipoEvento)
-            setIdEvento(idElement);
-            console.log(promise);
-
-        } catch (error) {
-            // Exibe uma notificação de erro em caso de falha na operação
-            setNotifyUser({
-                titleNote: 'Erro',
-                textNote: 'Erro na operação. Verifique sua conexão com a internet',
-                imgIcon: 'warning',
-                imgAlt: 'Imagem de ilustração de erro. Rapaz segurando letra x.',
-                showMessage: true
-            })
-        }
-    }
-
-    // Função para lidar com a exclusão de um evento
-    async function handleDelete(idElement) {
-        if (window.confirm('Confirma a exclusão')) {
-            try {
-                // Requisição para excluir um evento
-                const promise = await api.delete(`${eventsResource}/${idElement}`, { idElement })
-                if (promise.status == 204) {
-                    theMagic("Excluído com sucesso")
-                    const buscaEventos = await api.get(eventsResource);
-                    setEventos(buscaEventos.data)
-                }
-            } catch (error) {
-                // Exibe uma notificação de erro em caso de falha na operação
-                setNotifyUser({
-                    titleNote: 'Erro',
-                    textNote: 'Erro na operação. Verifique sua conexão com a internet',
-                    imgIcon: 'warning',
-                    imgAlt: 'Imagem de ilustração de erro. Rapaz segurando letra x.',
-                    showMessage: true
-                })
-            }
-        }
-    }
-
-    // Função para formatar os tipos de eventos em um formato compatível com o componente Select
-    function tituloTipo(tipoEventos) {
-        let arrayOptions = []
-
-        tipoEventos.forEach(element => {
-            arrayOptions.push({ value: element.idTipoEvento, text: element.titulo })
-        })
-        return arrayOptions
-    }
-
-    // RENDERIZAÇÃO - Estrutura de retorno do componente
     return (
         <>
-            {<Notification{...notifyUser} setNotifyUser={setNotifyUser} />} {/* Renderiza o componente de notificação */}
+            {<Notification {...notifyUser} setNotifyUser={setNotifyUser} />}
+
+            {showSpinner ? <Spinner /> : null}
+
             <MainContent>
-                {/* Seção para cadastro de evento */}
-                <section className="cadastro-evento-section">
-                    <Title titleText="Cadastro de Evento" />
+                <section className='cadastro-evento-section'>
+                    {/* título */}
+                    <Title titleText={"Eventos"} />
                     <Container>
-                        <div className="cadastro-evento__box">
+                        <div className='cadastro-evento__box'>
 
-                            {/* Renderiza a imagem ilustrativa do evento */}
-                            <ImageIlustrator imageRender={eventoImage} />
-
-                            {/* Formulário para cadastro ou edição de evento */}
-                            <form className='ftipo-evento' onSubmit={frmEdit ? handleUpdate : handleSubmit}>
+                            {/* imagem de ilustração */}
+                            <ImageIllustrator
+                                imageRender={EventoImagem}
+                            />
+                            {/* componente de formulário*/}
+                            <form
+                                className='ftipo-evento'
+                                onSubmit={frmEdit ? handleUpdate : handleSubmit}
+                            >
+                                {/* {cadastrar ou editar} */}
                                 {
-                                    !frmEdit ?
-                                        (
-                                            // Se não estiver em modo de edição, renderiza os campos do formulário de cadastro
-                                            <>
-                                                <Input
-                                                    id='Nome'
-                                                    type={'text'}
-                                                    placeholder={'Nome'}
-                                                    name={'nome'}
-                                                    required={'required'}
-                                                    value={nomeEvento}
-                                                    manipulationFunction={(e) => {
-                                                        setNomeEvento(e.target.value)
-                                                    }}
-                                                />
-
-                                                <Input
-                                                    id='Descricao'
-                                                    type={'text'}
-                                                    placeholder={'Descrição'}
-                                                    name={'descricao'}
-                                                    required={'required'}
-                                                    value={descricao}
-                                                    manipulationFunction={(e) => {
-                                                        setDescricao(e.target.value)
-                                                    }}
-                                                />
-
-                                                <Select
-                                                    id='TiposEvento'
-                                                    name={'tiposEvento'}
-                                                    required={'required'}
-                                                    options={tiposEvento}
-                                                    value={idTipoEvento}
-                                                    manipulationFunction={(e) => {
-                                                        setIdTipoEvento(e.target.value)
-                                                    }}
-                                                />
-
-                                                <Input
-                                                    id='dataEvento'
-                                                    type={'date'}
-                                                    placeholder={'dd/mm/aaaa'}
-                                                    name={'Data'}
-                                                    required={'required'}
-                                                    value={dataEvento}
-                                                    manipulationFunction={(e) => {
-                                                        setDataEvento(e.target.value)
-                                                    }}
-                                                />
-
-                                                <Button
-                                                    textButton="Cadastrar"
-                                                    id="cadastrar"
-                                                    name="cadastrar"
-                                                    // O formulário só será submetido porque o type é submit
-                                                    type="submit"
-                                                />
-                                            </>
-                                        ) :
-                                        // Se estiver em modo de edição, renderiza os campos do formulário de edição
+                                    !frmEdit ? (
                                         <>
                                             <Input
-                                                id='Nome'
-                                                type={'text'}
-                                                placeholder={'Nome'}
-                                                name={'nome'}
-                                                required={'required'}
-                                                value={nomeEvento}
-                                                manipulationFunction={(e) => {
-                                                    setNomeEvento(e.target.value)
-                                                }}
+                                                id="Nome"
+                                                placeholder="Nome"
+                                                name={"nome"}
+                                                type={"text"}
+                                                required={"required"}
+                                                value={nome}
+                                                manipulationFunction={(e) => { setNome(e.target.value); }}
                                             />
 
                                             <Input
-                                                id='Descricao'
-                                                type={'text'}
-                                                placeholder={'Descrição'}
-                                                name={'descricao'}
-                                                required={'required'}
+                                                id="Descricao"
+                                                placeholder="Descrição"
+                                                name={"descricao"}
+                                                type={"text"}
+                                                required={"required"}
                                                 value={descricao}
-                                                manipulationFunction={(e) => {
-                                                    setDescricao(e.target.value)
-                                                }}
+                                                manipulationFunction={(e) => { setDescricao(e.target.value); }}
                                             />
 
                                             <Select
-                                                id='TiposEvento'
-                                                name={'tiposEvento'}
-                                                required={'required'}
-                                                options={tiposEvento}
-                                                value={idTipoEvento}
+                                                id="tipo-evento"
+                                                name="tipo-evento"
+                                                required="required"
+                                                options={tipoEventos}
+                                                value={idTypeEvento}
                                                 manipulationFunction={(e) => {
-                                                    setIdTipoEvento(e.target.value)
+                                                    setIdTypeEvento(e.target.value)
+                                                }}
+                                            />
+
+
+
+                                            <Input
+                                                id="Data"
+                                                placeholder="Data do Evento"
+                                                name={"data"}
+                                                type={"date"}
+                                                required={"required"}
+                                                value={frmdata}
+                                                manipulationFunction={(e) => { setFrmData(e.target.value); }}
+                                            />
+
+                                            <Button
+                                                textButton="Cadastrar"
+                                                id="cadastrar"
+                                                name="cadastrar"
+                                                type="submit"
+                                            />
+
+                                            {/*  <Button
+                                                textButton="Magica"
+                                                id="cadastrar"
+                                                name="cadastrar"
+                                                type="button"
+                                                manipulationFunction={theMagic}
+                                            /> */}
+                                        </>
+                                    ) : (
+
+                                        <>
+                                            <Input
+                                                id="Nome"
+                                                placeholder="Nome"
+                                                name={"nome"}
+                                                type={"text"}
+                                                required={"required"}
+                                                value={frmEditData.nomeEvento}
+                                                manipulationFunction={(e) => {
+                                                    setNome(e.target.value);
                                                 }}
                                             />
 
                                             <Input
-                                                id='dataEvento'
-                                                type={'date'}
-                                                placeholder={'dd/mm/aaaa'}
-                                                name={'Data'}
-                                                required={'required'}
-                                                value={dataEvento}
+                                                id="Descricao"
+                                                placeholder="Descrição"
+                                                name={"descricao"}
+                                                type={"text"}
+                                                required={"required"}
+                                                value={frmEditData.descricao}
+                                                manipulationFunction={(e) => { setDescricao(e.target.value); }}
+                                            />
+
+                                            <Select
+                                                id="tipo-evento"
+                                                name="tipo-evento"
+                                                required="required"
+                                                options={tipoEventos}
+                                                value={frmEditData.idTypeEvento}
                                                 manipulationFunction={(e) => {
-                                                    setDataEvento(e.target.value)
+                                                    setIdTypeEvento(e.target.value)
                                                 }}
                                             />
 
-                                            {/* Botões para atualizar e cancelar a edição */}
-                                            <div className="buttons-editbox">
+
+
+                                            <Input
+                                                id="Data"
+                                                placeholder="Data do Evento"
+                                                name={"data"}
+                                                type={"date"}
+                                                required={"required"}
+                                                value={new Date(frmEditData.dataEvento).toLocaleDateString("sv-SE")}
+                                                manipulationFunction={(e) => { setFrmData(e.target.value); }}
+                                            />
+
+                                            <div className='buttons-editbox'>
                                                 <Button
                                                     textButton="Atualizar"
                                                     id="atualizar"
                                                     name="atualizar"
-                                                    // O formulário só será submetido porque o type é submit
                                                     type="submit"
-                                                    addtionalClass="button-component--middle"
+                                                    additinalClass='button-component--middle'
                                                 />
 
                                                 <Button
+
                                                     textButton="Cancelar"
                                                     id="cancelar"
                                                     name="cancelar"
-                                                    // O formulário só será submetido porque o type é submit
-                                                    type="submit"
+                                                    type="button"
                                                     manipulationFunction={editActionAbort}
-                                                    addtionalClass="button-component--middle"
+                                                    additinalClass='button-component--middle'
                                                 />
+
                                             </div>
 
                                         </>
+
+                                    )
                                 }
-
                             </form>
-                        </div>
 
+                        </div>
                     </Container>
                 </section>
 
-                {/* Seção para listar eventos */}
                 <section className='lista-eventos-section'>
                     <Container>
-                        <Title titleText={"Lista Tipo de Eventos"} color="white"></Title>
-                        {/* Componente de tabela para exibir a lista de eventos */}
-                        <TableEvent
+                        <Title titleText={"Lista de Eventos"} color='white' />
+                        <TableEv
                             dados={eventos}
+                            dadosTp={tipoEventos}
                             fnUpdate={showUpdateForm}
                             fnDelete={handleDelete}
                         />

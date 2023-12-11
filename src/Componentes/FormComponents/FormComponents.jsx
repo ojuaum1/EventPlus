@@ -55,27 +55,24 @@ export const Select = ({
     options,
     manipulationFunction,
     additionalClass = "",
-    onChange,
-    className,
-    value = ''
+    value
 }) => {
 
     return (
         <select
-            name={name}
-            id={id}
-            required={required}
-            className={`input-component ${additionalClass}`}
-            onChange={manipulationFunction}
-            value={value}
-        >
-            <option unselectable value="">Selecione </option>
-            {options.map((o) => {
-                return (
-                    <option value={o.idTipoEvento}>{o.titulo}</option>
-                );
-            })}
-        </select>
+        name={name}
+        id={id}
+        required={required ? "required" : ""}
+        className={`input-component ${additionalClass}`}
+        onChange ={manipulationFunction}
+        value = {value}
+    >
+
+        <option value=''> Selecione </option>
+
+        {options.map((option, index) => <option key={index} value={option.value}>{option.text}</option> )}
+
+    </select>
 
     )
 }

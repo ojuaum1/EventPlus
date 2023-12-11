@@ -11,7 +11,7 @@ import { UserContext, userDecodeToken } from "../../Context/AuthContext";
 
 const LoginPage = () => {
   // Estado local para armazenar dados do usuário
-  const [user, setUser] = useState({ email: "Joao.goxtoso@gmail.com", senha: "" });
+  const [user, setUser] = useState({ email: "", senha: "" });
 
   // Importa o contexto do usuário para autenticação
   const { userData, setUserData } = useContext(UserContext);
