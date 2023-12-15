@@ -10,7 +10,7 @@ const Table = ({ dados, fnDelete = null, fnUpdate = null }) => {
                 <tr className="table-data__head-row">
                     <th className="table-data_head-title table-data_head-title--big">Nome do Evento</th>
                     <th className="table-data_head-title table-data_head-title--big">Descrição</th>
-                    <th className="table-data_head-title table-data_head-title--big">Instituição</th>
+                    <th className="table-data_head-title table-data_head-title--big">Tipo do evento</th>
                     <th className="table-data_head-title table-data_head-title--big">Data do Evento</th>
                     <th className="table-data_head-title table-data_head-title--big">Editar</th>
                     <th className="table-data_head-title table-data_head-title--big">Deletar</th>

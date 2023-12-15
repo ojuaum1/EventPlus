@@ -1,14 +1,29 @@
 import axios from "axios";
 
-    export const myEventsResource = "/presencasEvento/ListarMinhas"
+   
 /**
  * Rota para o recurso Evento
  */
 export const eventsResource = '/Evento';
 
+
+export const oldEventResource = '/Evento/ListarAntigos'
+
+
 export const commentaryEventResource = '/ComentarioEvento'
 
+
+ export const myEventsResource = "/presencasEvento/ListarMinhas"
+
+ // Rota para Comentario
+export const commentsTrueResource = '/ComentariosEvento/ListarSomenteExibe';
+
+
 export const presencesEventResource = '/PresencasEvento';
+
+
+export const institutionResource = '/Instituicao';
+
 
 export const loginResource = '/Login';
 /**
@@ -29,3 +44,5 @@ const api = axios.create({
 });
 
 export default api;
+
+

@@ -8,65 +8,125 @@ import MainContent from '../../Componentes/MainContent/MainContent';
 import VisionSection from '../../Componentes/VisionSection/VisionSection';
 import NextEvent from '../../Componentes/NextEvent/NextEvent';
 import api from '../../Services/Service';
-import {nextEventResource} from '../../Services/Service'
-
+import { nextEventResource, oldEventResource } from '../../Services/Service'
+import OldEvent from '../../Componentes/OldEvent/OldEvent';
+import ContactSection from '../../Componentes/ContactSection/ContactSection'
 
 const HomePage = () => {
-  const [nextEvents, setNextEvents] = useState([]);
-  const [notifyUser, setNotifyUser] = useState("")
+
+  const [notifyUser, setNotifyerUser] = useState();
+
+  const [nextEvents, setNextEvents] = useState([]); //dados mocados
+
+  const [oldEvents, setOldEvents] = useState([]);
+
+
+  async function getNextEvents() {
+    try {
+      const promise = await api.get(`${nextEventResource}`);
+      const dados = await promise.data;
+
+      setNextEvents(dados)//Atualiza o state
+    } catch (error) {
+      setNotifyerUser({
+        titleNote: "Erro na API",
+        textNote: `Nao foi possivel carregar os proximos evento... Verifique a sua conexao com a internet`,
+        imgIcon: "warning",
+        imgAlt: "Imagem de ilustracai de erro, Cuidado!",
+        showMessage: true
+      });
+    }
+  }
+
+  async function getOldEvents() {
+    try {
+      const promise = await api.get(`${oldEventResource}`);
+      const dados = await promise.data;
+
+      setOldEvents(dados)//Atualiza o state
+    } catch (error) {
+      setNotifyerUser({
+        titleNote: "Erro na API",
+        textNote: `Nao foi possivel carregar os Antigos evento... Verifique a sua conexao com a internet`,
+        imgIcon: "warning",
+        imgAlt: "Imagem de ilustracai de erro, Cuidado!",
+        showMessage: true
+      });
+    }
+  }
+
 
   useEffect(() => {
-    async function getNextEvents() {
-      try {
-        // const promisse = await api.get("/Evento/ListarProximos");
-        const promisse = await api.get(`${nextEventResource}`);
-        const dados = await promisse.data
-        console.log(dados);
 
-        setNextEvents(dados);//atualiza o state
-      } catch (error) {
-        setNotifyUser({
-          titleNote:"erro",
-          textNote: `o titulo deve conter pelo menos 3 caracteres`,
-          imgIcon: "sucess",
-          imgAlt:  "imagem de ilustraçao de erro. rapaz segurando balao com simbolo de x",
-          showMessage:true,
-      })
-      }
-    }
-    getNextEvents()//roda a função
+    getOldEvents();
+    getNextEvents();//roda a funcao
   }, []);
+
   return (
+    <div>
 
-    <MainContent>
-      <Banner />
+      <Notification {...notifyUser} setNotifyUser={setNotifyerUser} />
 
-      <section className='proximos-eventos'>
-        <Container>
-          <Title titleText={'proximos-eventos'} />
+      {/* <Title titleText={"Home Page"} className="margem_acima" /> */}
+      <MainContent>
 
-          <div className='events-box'>
-            {
-              nextEvents.map((e) => {
-                return (
-                  <NextEvent
-                    key={e.idEvento}
-                    title={e.nomeEvento}
-                    description={e.descricao}
-                    eventDate={e.dataEvento}
-                    idEvent={e.idEvento}
-                  />
-                );
-              })
-            }
-          </div>
-        </Container>
-      </section>
+        <Banner />
 
-      <VisionSection />
+        {/* PROXIMOS EVENTOS */}
 
-    </MainContent >
+        <section className='proximos-eventos'>
+          <Container>
 
+            <Title titleText={"Proximos Eventos"} />
+
+            <div className='events-box'>
+
+              {
+                nextEvents.map((e) => {
+                  return (
+                    <NextEvent
+                      key={e.idEvento}
+                      title={e.nomeEvento}
+                      decription={e.descricao}
+                      eventDate={e.dataEvento}
+                      idEvent={e.idEvento}
+                    />
+                  );
+                })
+              }
+
+            </div>
+
+            <Title titleText={"Eventos Concluidos"} />
+
+            <div className='events-box'>
+
+              {
+                oldEvents.map((e) => {
+                  return (
+                    <OldEvent
+                      key={e.idEvento}
+                      title={e.nomeEvento}
+                      decription={e.descricao}
+                      eventDate={e.dataEvento}
+                      idEvent={e.idEvento}
+                    />
+                  );
+                })
+              }
+
+            </div>
+
+          </Container>
+        </section>
+
+        <VisionSection />
+
+        <ContactSection />
+
+      </MainContent>
+
+    </div>
   );
 };
 

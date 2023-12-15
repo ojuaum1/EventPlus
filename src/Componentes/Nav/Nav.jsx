@@ -1,58 +1,59 @@
 import React, { useContext } from 'react';
-import '../Nav/Nav.css';
 
-//import imagens
-import logoMobile from '../../Assets/images/logo-white.svg';
-import logoDesktop from '../../Assets/images/logo-pink.svg';
-import { Link } from 'react-router-dom';
+import logoMobile from '../../Assets/images/logo-white.svg' // Importa a imagem do logotipo para telas móveis
+import logoDesktop from '../../Assets/images/logo-pink.svg' // Importa a imagem do logotipo para telas de desktop
+import { Link } from 'react-router-dom'; // Importa o componente Link do react-router-dom
+
+import './Nav.css'; // Importa o arquivo de estilos CSS para o componente Nav
 import { UserContext } from '../../Context/AuthContext';
 
 const Nav = ({ exibeNavbar, setExibeNavbar }) => {
-    const {userData} = useContext(UserContext);
 
-    //console.log(`exibe o menu? ${exibeNavbar}`);
-
+    const { userData } = useContext(UserContext);
+    
     return (
-
         <nav className={`navbar ${exibeNavbar ? "exibeNavbar" : ""}`}>
-            <span
-                onClick={() => { setExibeNavbar(false) }}
-                className='navbar__close'
-            >
-                X
-            </span>
-
+            {/* Renderiza a barra de navegação, a classe CSS 'exibeNavbar' é adicionada se exibeNavbar for verdadeiro */}
+            
+            <span onClick={() => { setExibeNavbar(false) }} className='navbar__close'> X </span>
+            {/* Renderiza um botão 'X' para fechar a barra de navegação ao ser clicado */}
+            
             <Link to="/" className='eventlogo'>
                 <img
                     className='eventlogo__logo-image'
                     src={window.innerWidth >= 992 ? logoDesktop : logoMobile}
-                    alt="Event plus Logo"
+                    alt="Event Plus Logo"
                 />
             </Link>
+            {/* Renderiza um link para a página inicial, contendo o logotipo, cuja imagem muda com base na largura da janela */}
+            
+            <div className='navbar__items-box'>
+                {/* Renderiza uma caixa que contém links para diferentes páginas */}
+                
+                <Link to="/" className='navbar__item'>Home</Link> {/* Link para a página inicial */}
 
-                       <div className="navbar__items-box">
-                <Link to="/" className='navbar__item'>Home</Link>
-                
-                {userData.nome && userData.role === "adm" ? (
-                <>
-                    <Link  className='navbar__item' to="/tipo-eventos">Tipos de Evento</Link>
-                    <Link  className='navbar__item' to="/eventos">Eventos</Link>
-                </>
-                ) : (
-                    userData.nome && userData.role === "Cliente" ? (
-                        <Link  className='navbar__item' to="/eventos-Aluno">Eventos Aluno</Link>
-                    ):(
-                        null
-                    )
-                )}
-                
-                {/* <Link  className='navbar__item' to="/login">Login</Link> */}
-                {/* <Link  className='navbar__item' to="/testes">Testes</Link> */}
+                {userData.nome && userData.role === "Administrador" ? (
+
+                    <>
+                        <Link to="/tipo-eventos" className='navbar__item'>Tipos de Evento</Link> {/* Link para a página de tipos de evento */}
+                        <Link to="/eventos" className='navbar__item'>Eventos</Link> {/* Link para a página de eventos */}
+                        <Link to="/detalhes-evento" className='navbar__item'>Detalhes Evento</Link> {/* Link para a página de detalhes-eventos */}
+                    </>
+
+                // <Link to="/testes" className='navbar__item'>Teste</Link> {/* Link para a página de testes */}
+                ) : userData.nome && userData.role === "Comum" ? (
+                    <>
+                    <Link to="/eventos-aluno" className='navbar__item'>Eventos Alunos</Link> {/* Link para a página de eventos */}
+
+                    <Link to="/detalhes-evento" className='navbar__item'>Detalhes Evento</Link> {/* Link para a página de detalhes-eventos */}
+                    </>
+
+                ): null}
+
+
             </div>
-
         </nav>
-
     );
 };
 
-export default Nav;
+export default Nav; // Exporta o componente Nav para uso em outros lugares da aplicação

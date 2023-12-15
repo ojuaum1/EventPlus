@@ -1,9 +1,10 @@
 import React from 'react';
-import './NextEvent.css';
+import './OldEvent.css';
 import { dateFormatDbToView } from '../../Utils/StringFunction';
 import { Tooltip } from 'react-tooltip';
+import { Link } from 'react-router-dom';
 
-const NextEvent = ({title, decription, eventDate, idEvent}) => {
+const OldEvent = ({title, decription, eventDate, idEvent}) => {
     function conectar(idEvent){
         alert(`Chamar recurso para conectar: ${idEvent}`)
     }
@@ -25,9 +26,9 @@ const NextEvent = ({title, decription, eventDate, idEvent}) => {
             <p className='event-card__description'>{dateFormatDbToView(eventDate)}</p> {/* {dateFormatDbToView(eventDate)}    FORMA CHAMANDO FUNCAO CRIADA EM Utils/stringFunctions.js PARA CONVERTER A DATA, NomeFuncao: dateFormatDbToView */}
             {/* <p className='event-card__description'>{new Date(eventDate).toLocaleDateString()}</p> */} {/*new Date(eventDate).toLocaleDateString()   FORMA COM FUNCAO NATIVA JS MELHOR PARA FAZER */}
 
-            <a onClick={() => conectar(idEvent)} href="" className='event-card__connect-link'>Conectar</a>
+            <Link to={`/detalhes-evento/${idEvent}`} className='event-card__connect-link'>Visualizar</Link>
         </article>
     );
 };
 
-export default NextEvent;
+export default OldEvent;
